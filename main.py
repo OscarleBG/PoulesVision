@@ -10,16 +10,23 @@ pi_camera = VideoCamera(flip=False) # flip pi camera if upside down.
 # App Globals (do not edit)
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
+
+#button commands:
+DOOR_OPEN, DOOR_CLOSE, ALARM = "door-open","door-close","alarm"
+COMMANDS = {
+        'Open Door':DOOR_OPEN,
+        'Close Door':DOOR_CLOSE,
+        'Alarm':ALARM
+}
+COMMANDS_ACTIONS = {
+        DOOR_OPEN:open_door,
+        DOOR_CLOSE:close_door,
+        ALARM:ring_alarm
+}
+
+@app.route('/')
 def index():
-    if request.method == 'POST':
-        if 'door-open' in request.form:
-            open_door()
-        elif 'door-close' in request.form:
-            close_door()
-        elif 'alarm' in request.form:
-            alarm()
-    return render_template('index.html') #you can customze index.html here
+    return render_template('index.html',commands=COMMANDS)
 
 def gen(camera):
     #get camera frame
@@ -33,9 +40,15 @@ def video_feed():
     return Response(gen(pi_camera), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
+#Button commands
+@app.route('/<cmd>')
+def command(cmd=None):
+    COMMANDS_ACTIONS.get(cmd,lambda:None)()
+    return 'OK', 200, {'Content-Type': 'text/plain'}
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=False)
-    
+
 
 
