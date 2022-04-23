@@ -1,2 +1,1 @@
-source env/bin/activate
-waitress-serve --call 'main:create_app'
+env/bin/waitress-serve --port 80 --call 'main:create_app'

@@ -11,4 +11,4 @@ def close_door():
 
 
 def ring_alarm():
-    bip.beep(on_time=0.01,off_time=0.1,n=2)
+    bip.beep(on_time=0.1,off_time=0.1,n=2)

@@ -6,6 +6,12 @@ import cv2
 import imutils
 import time
 import numpy as np
+import importlib.machinery
+
+loader = importlib.machinery.SourceFileLoader('report', '/home/pi/image-collection/mouvement_detection.py')
+mouvement_detection = loader.load_module('report')
+
+IMAGE_PROCESSOR = mouvement_detection.draw_mouvement
 
 class VideoCamera(object):
     def __init__(self, flip = False):
@@ -25,7 +31,8 @@ class VideoCamera(object):
         success = False
         while not success:
             success, frame = self.vs.read()
-        #assert(success, "An error occurred while capturing last frame :(")
         #frame = self.flip_if_needed(frame)
+        if(IMAGE_PROCESSOR):
+            frame = IMAGE_PROCESSOR(frame,self.vs)
         ret, jpeg = cv2.imencode('.jpg', frame)
         return jpeg.tobytes()

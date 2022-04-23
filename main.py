@@ -10,6 +10,7 @@ pi_camera = VideoCamera(flip=False) # flip pi camera if upside down.
 # App Globals (do not edit)
 app = Flask(__name__)
 
+FPS_LIMIT = 5
 
 #button commands:
 DOOR_OPEN, DOOR_CLOSE, ALARM = "door-open","door-close","alarm"
@@ -31,7 +32,9 @@ def index():
 
 def gen(camera):
     #get camera frame
+    sleep_time = 1/ FPS_LIMIT
     while True:
+        time.sleep(sleep_time)
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
