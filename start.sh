@@ -1,1 +1,2 @@
-python3 /home/pi/pi-camera-stream-flask/main.py
+source env/bin/activate
+waitress-serve --call 'main:create_app'
