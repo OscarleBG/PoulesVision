@@ -13,11 +13,12 @@ app = Flask(__name__)
 
 #button commands:
 DOOR_OPEN, DOOR_CLOSE, ALARM = "door-open","door-close","alarm"
-COMMANDS = {
-        'Open Door':DOOR_OPEN,
-        'Close Door':DOOR_CLOSE,
-        'Alarm':ALARM
-}
+# triplet list: (label, value, type from bootstrap)
+BUTTON_COMMANDS = [
+        ('Open Door',DOOR_OPEN,'primary'),
+        ('Close Door',DOOR_CLOSE,'primary'),
+        ('Alarm',ALARM,'danger'),
+]
 COMMANDS_ACTIONS = {
         DOOR_OPEN:open_door,
         DOOR_CLOSE:close_door,
@@ -26,7 +27,7 @@ COMMANDS_ACTIONS = {
 
 @app.route('/')
 def index():
-    return render_template('index.html',commands=COMMANDS)
+    return render_template('index.html',commands=BUTTON_COMMANDS)
 
 def gen(camera):
     #get camera frame
@@ -51,4 +52,5 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=False)
 
 
-
+def create_app():
+   return app

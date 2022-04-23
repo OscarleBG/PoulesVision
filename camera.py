@@ -22,8 +22,10 @@ class VideoCamera(object):
         return frame
 
     def get_frame(self):
-        success, frame = self.vs.read()
-        assert(success, "An error occurred while capturing last frame :(")
-        frame = self.flip_if_needed(frame)
+        success = False
+        while not success:
+            success, frame = self.vs.read()
+        #assert(success, "An error occurred while capturing last frame :(")
+        #frame = self.flip_if_needed(frame)
         ret, jpeg = cv2.imencode('.jpg', frame)
         return jpeg.tobytes()
