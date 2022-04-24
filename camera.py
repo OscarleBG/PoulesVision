@@ -6,18 +6,16 @@ import cv2
 import imutils
 import time
 import numpy as np
-import importlib.machinery
+from image_collection.mouvement_detection import MouvementDetector
 
-loader = importlib.machinery.SourceFileLoader('report', '/home/pi/image-collection/mouvement_detection.py')
-mouvement_detection = loader.load_module('report')
-
-IMAGE_PROCESSOR = mouvement_detection.draw_mouvement
 
 class VideoCamera(object):
     def __init__(self, flip = False):
         self.vs = cv2.VideoCapture(0)
         self.flip = flip
         time.sleep(2.0)
+        mouvement_detector = MouvementDetector(self.vs)
+        mouvement_detector.start_checking()
 
     def __del__(self):
         self.vs.stop()
@@ -32,7 +30,5 @@ class VideoCamera(object):
         while not success:
             success, frame = self.vs.read()
         #frame = self.flip_if_needed(frame)
-        if(IMAGE_PROCESSOR):
-            frame = IMAGE_PROCESSOR(frame,self.vs)
         ret, jpeg = cv2.imencode('.jpg', frame)
         return jpeg.tobytes()
