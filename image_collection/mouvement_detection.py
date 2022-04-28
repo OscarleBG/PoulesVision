@@ -8,7 +8,7 @@ from time import time_ns,sleep
 import telegram
 import threading
 
-PATH = '/home/pi/image-collection/captured_images'
+PATH = '/home/pi/pi-camera-stream-flask/image_collection/captured_images'
 
 TELEGRAM_BOT_TOKEN = '5344733165:AAF0Wzl6y0U03iQGXjHjwAfOqMhjbxltN5Q' 
 TELEGRAM_CHAT_ID = -646055502
