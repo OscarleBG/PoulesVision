@@ -2,10 +2,10 @@ import socket, cv2, pickle, struct, imutils
 from decouple import config
 
 PORT = config('SOCKET_PORT',cast=int)
-IMAGE_SIZE = config('IMAGE_SIZE',cast=tuple)
+IMAGE_WIDTH = config('IMAGE_WIDTH',cast=int)
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-hostname = socket.gethostname()
+hostname = config('HOST_IP')
 host_ip = socket.gethostbyname(hostname)
 
 print(f'[+] Server IP: {host_ip}')
@@ -31,7 +31,7 @@ while True:
             if not ret:
                 continue
 
-            frame = imutils.resize(frame, width=IMAGE_SIZE[0], height=IMAGE_SIZE[1])
+            frame = imutils.resize(frame, width=IMAGE_WIDTH)
             frame = pickle.dumps(frame)
             frame_size = len(frame)
             client_socket.send(struct.pack('!I', frame_size))
