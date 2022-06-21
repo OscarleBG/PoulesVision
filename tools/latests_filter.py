@@ -2,7 +2,7 @@ import os
 from shutil import copy
 from tqdm import tqdm
 from sys import path
-path.append('../')
+path.append('../old/image_collection/')
 from image_collection.utils import try_mkdir
 
 KEPT_NB = 200

@@ -4,10 +4,10 @@ filters images that haven't been labelled
 import os,sys,shutil
 
 from sys import path
-path.append('../')
+path.append('../old/image_collection/')
 from image_collection.utils import try_mkdir
 
-path = os.path.join('./','' if not any(sys.argv) else sys.argv[0])
+path = os.path.join('/', '' if not any(sys.argv) else sys.argv[0])
 
 files = os.listdir(path)
 images = [f[:-4] for f in files if f.endswith('.png')]

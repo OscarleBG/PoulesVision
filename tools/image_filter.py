@@ -9,12 +9,12 @@ from shutil import copy
 from tqdm import tqdm
 
 from sys import path
-path.append('../')
+path.append('../old/image_collection/')
 from image_collection.utils import try_mkdir
 
 
 
-IMAGE_COLLECTION_PATH = './'
+IMAGE_COLLECTION_PATH = '/'
 FILTERED_IMAGES_PATH = os.path.join(IMAGE_COLLECTION_PATH,'filtered')
 
 #lower threshold <=> keep more images

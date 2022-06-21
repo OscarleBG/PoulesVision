@@ -34,5 +34,9 @@ while True:
             frame = imutils.resize(frame, width=IMAGE_WIDTH)
             frame = pickle.dumps(frame)
             frame_size = len(frame)
-            client_socket.send(struct.pack('!I', frame_size))
-            client_socket.send(frame)
+            try:
+                client_socket.send(struct.pack('!I', frame_size))
+                client_socket.send(frame)
+            except BrokenPipeError:
+                print('[-] Client disconnected')
+                break
