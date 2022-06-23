@@ -10,7 +10,7 @@ class VideoStreamClient:
         self.frame = None
         self.new_frame = False
 
-        self.image_hub = imagezmq.ImageHub()
+        self.image_hub = imagezmq.ImageHub(open_port=config("HOST_PORT"))
 
         self.get_frame_thread = th.Thread(target=self.get_frame_loop)
         self.get_frame_thread.start()
