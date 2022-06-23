@@ -3,8 +3,8 @@ import time
 from flask import Flask, render_template, Response
 
 from button_actions import *
-from client.TensorflowBoxDrawer import BoxDrawer
-from client.VideoStreamClient import VideoStreamClient
+from TensorflowBoxDrawer import BoxDrawer
+from VideoStreamClient import VideoStreamClient
 
 pi_camera = VideoStreamClient()
 
