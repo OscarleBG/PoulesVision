@@ -1,7 +1,6 @@
-import cv2
 import numpy as np
 import tensorflow as tf
-
+from decouple import config
 from TelegramNotifier import TelegramNotifier
 from object_detection.utils import visualization_utils as vis_util
 
@@ -14,7 +13,6 @@ LABEL_MAP = [
     'Sandrine',
     'Arnaud',
 ]
-MIN_CONFIDENCE = 0.8
 
 
 class BoxDrawer:
@@ -22,11 +20,13 @@ class BoxDrawer:
         self.model = tf.saved_model.load(MODEL_PATH)
         self.category_index = {i + 1: {'id': i + 1, 'name': LABEL_MAP[i]} for i in range(len(LABEL_MAP))}
         self.telegram_notifier = TelegramNotifier()
+        self.min_confidence = config('MIN_CONFIDENCE', cast=float)
 
     def draw_boxes(self, image):
         detections = self._predict(image)
         image = self._draw_boxes(image, detections)
-        detected_objects = [LABEL_MAP[i-1] for i in detections['detection_classes'][detections['detection_scores'] > MIN_CONFIDENCE]]
+        detected_objects = [LABEL_MAP[i - 1] for i in
+                            detections['detection_classes'][detections['detection_scores'] > self.min_confidence]]
         if len(detected_objects) > 0:
             self._on_object_detected(image, detected_objects)
         return image

@@ -6,19 +6,16 @@ from VideoStreamClient import VideoStreamClient
 import cv2
 from decouple import config
 
-pi_camera = VideoStreamClient()
-
 app = Flask(__name__)
 
+pi_camera = VideoStreamClient()
 box_drawer = BoxDrawer()
-
 FRAME_PREPROCESSORS = [
-    box_drawer.draw_boxes
+    # box_drawer.draw_boxes
 ]
 
 # button commands:
 DOOR_OPEN, DOOR_CLOSE, ALARM = "door-open", "door-close", "alarm"
-# triplet list: (label, value, type from bootstrap)
 BUTTON_COMMANDS = [
     ('Open Door', DOOR_OPEN, 'primary'),
     ('Close Door', DOOR_CLOSE, 'primary'),
@@ -43,9 +40,11 @@ def preprocess_frame(frame):
 
 
 def gen(camera):
-    sleep_time = 1 / config('FPS_LIMIT', cast=int)
+    fps_limit = config('FPS_LIMIT', cast=int)
+    sleep_time = 1 / fps_limit
     while True:
-        time.sleep(sleep_time)
+        if fps_limit > 0:
+            time.sleep(sleep_time)
         frame = camera.get_frame()
         frame = preprocess_frame(frame)
         frame = cv2.imencode('.jpg', frame)[1].tobytes()
@@ -66,7 +65,7 @@ def command(cmd=None):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=False)
+    app.run(host='0.0.0.0', debug=False, port=80)
 
 
 def create_app():
