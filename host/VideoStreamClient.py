@@ -1,8 +1,7 @@
-import cv2
 import numpy as np
-from decouple import config
 import threading as th
 import imagezmq
+from decouple import config
 
 
 class VideoStreamClient:
@@ -10,7 +9,7 @@ class VideoStreamClient:
         self.frame = None
         self.new_frame = False
 
-        self.image_hub = imagezmq.ImageHub(open_port=config("HOST_PORT"))
+        self.image_hub = imagezmq.ImageHub(open_port=f'tcp://*:{config("HOST_PORT")}')
 
         self.get_frame_thread = th.Thread(target=self.get_frame_loop)
         self.get_frame_thread.start()
