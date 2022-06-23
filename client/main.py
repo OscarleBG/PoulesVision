@@ -1,8 +1,9 @@
 import time
 from flask import Flask, render_template, Response
 from button_actions import *
-# from TensorflowBoxDrawer import BoxDrawer
+from TensorflowBoxDrawer import BoxDrawer
 from VideoStreamClient import VideoStreamClient
+import cv2
 
 pi_camera = VideoStreamClient()
 
@@ -10,10 +11,10 @@ app = Flask(__name__)
 
 FPS_LIMIT = 15
 
-# box_drawer = BoxDrawer()
+box_drawer = BoxDrawer()
 
 FRAME_PREPROCESSORS = [
-    # box_drawer.draw_boxes
+    box_drawer.draw_boxes
 ]
 
 # button commands:
@@ -48,6 +49,7 @@ def gen(camera):
         time.sleep(sleep_time)
         frame = camera.get_frame()
         frame = preprocess_frame(frame)
+        frame = cv2.imencode('.jpg', frame)[1].tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 

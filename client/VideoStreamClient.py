@@ -31,12 +31,10 @@ class VideoStreamClient:
             frame_data = self.data[:msg_size]
             self.data = self.data[msg_size:]
             self.frame = pickle.loads(frame_data)
-            # cv2.imshow('Received video stream', frame)
-            # cv2.waitKey(1)
 
     def get_frame(self):
-        _, frame = cv2.imencode('.jpg', self.frame)
-        return frame.tobytes()
+        # _, frame = cv2.imencode('.jpg', self.frame)
+        return self.frame
 
     def __del__(self):
         self.client_socket.close()

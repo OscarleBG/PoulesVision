@@ -37,6 +37,6 @@ while True:
             try:
                 client_socket.send(struct.pack('!I', frame_size))
                 client_socket.send(frame)
-            except BrokenPipeError:
+            except BrokenPipeError or ConnectionResetError as e:
                 print('[-] Client disconnected')
                 break
