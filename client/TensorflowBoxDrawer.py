@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import tensorflow as tf
 
-from client.TelegramNotifier import TelegramNotifier
+from TelegramNotifier import TelegramNotifier
 from object_detection.utils import visualization_utils as vis_util
 
 MODEL_PATH = '../poulenet/saved_model'
