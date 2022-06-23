@@ -4,6 +4,7 @@ from button_actions import *
 from TensorflowBoxDrawer import BoxDrawer
 from VideoStreamClient import VideoStreamClient
 import cv2
+from decouple import config
 
 pi_camera = VideoStreamClient()
 
@@ -42,7 +43,7 @@ def preprocess_frame(frame):
 
 
 def gen(camera):
-    sleep_time = 1 / config.FPS_LIMIT
+    sleep_time = 1 / config('FPS_LIMIT', cast=int)
     while True:
         time.sleep(sleep_time)
         frame = camera.get_frame()
