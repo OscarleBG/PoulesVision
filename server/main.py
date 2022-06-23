@@ -1,42 +1,20 @@
-import socket, cv2, pickle, struct, imutils
+from socket import gethostname
+from time import sleep
 from decouple import config
+from imagezmq import ImageSender
+from imutils.video import VideoStream
 
 
 def main():
-    PORT = config('SOCKET_PORT', cast=int)
-    IMAGE_WIDTH = config('IMAGE_WIDTH', cast=int)
+    sender = ImageSender(connect_to=f'tcp://{config("HOST_IP")}:{config("HOST_PORT")}')
 
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    hostname = config('HOST_IP')
-    host_ip = socket.gethostbyname(hostname)
-
-    print(f'[+] Server IP: {host_ip}')
-
-    socket_address = (host_ip, PORT)
-    server_socket.bind(socket_address)
-    server_socket.listen()
-
-    print(f'[+] Listening on {host_ip}:{PORT}')
+    rpi_name = gethostname()
+    picam = VideoStream(usePiCamera=True).start()
+    sleep(2)
 
     while True:
-        client_socket, client_address = server_socket.accept()
-        print(f'[+] Accepted connection from {client_address}')
-
-        if client_socket:
-            video_stream = cv2.VideoCapture(0)
-            while video_stream.isOpened():
-                ret, frame = video_stream.read()
-                if not ret:
-                    continue
-                frame = imutils.resize(frame, width=IMAGE_WIDTH)
-                frame = pickle.dumps(frame)
-                frame_size = len(frame)
-                try:
-                    client_socket.send(struct.pack('!I', frame_size))
-                    client_socket.send(frame)
-                except BrokenPipeError or ConnectionResetError as e:
-                    print('[-] Client disconnected')
-                    break
+        image = picam.read()
+        sender.send_image(rpi_name, image)
 
 
 if __name__ == '__main__':
