@@ -21,8 +21,7 @@ class VideoStreamClient:
             self.image_hub.send_reply(b"K")
             self.new_frame = True
 
-
-def get_frame(self) -> (bool, np.ndarray):
-    new_frame = self.new_frame
-    self.new_frame = False
-    return new_frame, self.frame
+    def get_frame(self) -> (bool, np.ndarray):
+        new_frame = self.new_frame
+        self.new_frame = False
+        return new_frame, self.frame
