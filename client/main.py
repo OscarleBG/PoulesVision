@@ -1,9 +1,7 @@
 import time
-
 from flask import Flask, render_template, Response
-
 from button_actions import *
-from TensorflowBoxDrawer import BoxDrawer
+# from TensorflowBoxDrawer import BoxDrawer
 from VideoStreamClient import VideoStreamClient
 
 pi_camera = VideoStreamClient()
@@ -12,9 +10,11 @@ app = Flask(__name__)
 
 FPS_LIMIT = 15
 
-box_drawer = BoxDrawer()
+# box_drawer = BoxDrawer()
 
-FRAME_PREPROCESSORS = [box_drawer.draw_boxes]
+FRAME_PREPROCESSORS = [
+    # box_drawer.draw_boxes
+]
 
 # button commands:
 DOOR_OPEN, DOOR_CLOSE, ALARM = "door-open", "door-close", "alarm"
@@ -39,6 +39,7 @@ def index():
 def preprocess_frame(frame):
     for f in FRAME_PREPROCESSORS:
         frame = f(frame)
+    return frame
 
 
 def gen(camera):
