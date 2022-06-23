@@ -23,12 +23,10 @@ class BoxDrawer:
 
     def draw_boxes(self, image):
         detections = self._predict(image)
-        image = self._draw_boxes(image, detections)
-        detected_objects = [LABEL_MAP[i - 1] for i in
-                            detections['detection_classes'][detections['detection_scores'] > self.min_confidence]]
-        if len(detected_objects) > 0:
-            self._on_object_detected(image, detected_objects)
-        return image
+        image_with_boxes = self._draw_boxes(image.copy(), detections)
+        detected_objects = [LABEL_MAP[i - 1] for i in detections['detection_classes'][detections['detection_scores'] > self.min_confidence]]
+        self._on_object_detected(image, detected_objects)
+        return image_with_boxes
 
     def _predict(self, image):
         image = tf.expand_dims(image, 0)
@@ -50,4 +48,6 @@ class BoxDrawer:
             min_score_thresh=self.min_confidence)
 
     def _on_object_detected(self, image, detected_objects):
+        if len(detected_objects) <= 0:
+            return
         self.telegram_notifier.notify(image, detected_objects)
