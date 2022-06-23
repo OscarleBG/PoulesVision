@@ -2,4 +2,4 @@
 venv/Scripts/python.exe server/main.py
 
 # Linux
-#venv/bin/python server/VideoStreamClient.py
+#venv/bin/python camera/VideoStreamClient.py
