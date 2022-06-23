@@ -14,7 +14,6 @@ LABEL_MAP = [
     'Arnaud',
 ]
 
-
 class BoxDrawer:
     def __init__(self):
         self.model = tf.saved_model.load(MODEL_PATH)
@@ -48,7 +47,7 @@ class BoxDrawer:
             detections['detection_scores'],
             self.category_index,
             use_normalized_coordinates=True,
-            min_score_thresh=MIN_CONFIDENCE)
+            min_score_thresh=self.min_confidence)
 
     def _on_object_detected(self, image, detected_objects):
         self.telegram_notifier.notify(image, detected_objects)
