@@ -1,10 +1,14 @@
-import socket, cv2, pickle, struct
+import socket, pickle, struct
+
+import numpy as np
 from decouple import config
 import threading as th
+
 
 class VideoStreamClient:
     def __init__(self):
         self.frame = None
+        self.new_frame = False
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect((config('HOST_IP'), config('SOCKET_PORT', cast=int)))
 
@@ -27,7 +31,9 @@ class VideoStreamClient:
             frame_data = self.data[:msg_size]
             self.data = self.data[msg_size:]
             self.frame = pickle.loads(frame_data)
+            self.new_frame = True
 
-    def get_frame(self):
-        # _, frame = cv2.imencode('.jpg', self.frame)
-        return self.frame
+    def get_frame(self) -> (bool, np.ndarray):
+        new_frame = self.new_frame
+        self.new_frame = False
+        return new_frame, self.frame

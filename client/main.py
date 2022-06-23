@@ -11,7 +11,7 @@ app = Flask(__name__)
 pi_camera = VideoStreamClient()
 box_drawer = BoxDrawer()
 FRAME_PREPROCESSORS = [
-    # box_drawer.draw_boxes
+    box_drawer.draw_boxes
 ]
 
 # button commands:
@@ -45,7 +45,9 @@ def gen(camera):
     while True:
         if fps_limit > 0:
             time.sleep(sleep_time)
-        frame = camera.get_frame()
+        ret,frame = camera.get_frame()
+        if not ret:
+            continue
         frame = preprocess_frame(frame)
         frame = cv2.imencode('.jpg', frame)[1].tobytes()
         yield (b'--frame\r\n'
