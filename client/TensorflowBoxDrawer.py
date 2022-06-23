@@ -24,9 +24,7 @@ class BoxDrawer:
         return image
 
     def _predict(self, image):
-        print(image.shape)
         image = tf.expand_dims(image, 0)
-        print(image.shape)
         detections = self.model(image)
         num_detections = int(detections.pop('num_detections'))
         detections = {key: value[0, :num_detections].numpy() for key, value in detections.items()}

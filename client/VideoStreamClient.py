@@ -35,6 +35,3 @@ class VideoStreamClient:
     def get_frame(self):
         # _, frame = cv2.imencode('.jpg', self.frame)
         return self.frame
-
-    def __del__(self):
-        self.client_socket.close()
