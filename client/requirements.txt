@@ -2,3 +2,6 @@ imutils
 numpy
 opencv-python
 python-decouple
+python-telegram-bot
+matplotlib
+tensorflow-gpu

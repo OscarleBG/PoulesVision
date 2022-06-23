@@ -9,8 +9,6 @@ pi_camera = VideoStreamClient()
 
 app = Flask(__name__)
 
-FPS_LIMIT = 15
-
 box_drawer = BoxDrawer()
 
 FRAME_PREPROCESSORS = [
@@ -44,7 +42,7 @@ def preprocess_frame(frame):
 
 
 def gen(camera):
-    sleep_time = 1 / FPS_LIMIT
+    sleep_time = 1 / config.FPS_LIMIT
     while True:
         time.sleep(sleep_time)
         frame = camera.get_frame()
