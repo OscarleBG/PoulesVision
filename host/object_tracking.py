@@ -79,12 +79,12 @@ class ObjectTracker:
             OUTSIDE_BOUNDING_BOX[0][0] < coordinates[0] < OUTSIDE_BOUNDING_BOX[1][0]
             and OUTSIDE_BOUNDING_BOX[0][1] < coordinates[1] < OUTSIDE_BOUNDING_BOX[1][1]
         ):
-            self._state = State.INSIDE
-        else:
             self._state = State.OUTSIDE
+        else:
+            self._state = State.INSIDE
 
     def get_state(self) -> str:
-        if self._last_seen_time and time.time() - self._last_seen_time < 5:
+        if self._last_seen_time is not None and time.time() - self._last_seen_time < 20:
             # they were seen less than 5 seconds ago
             return "in " + State.CUISINE.name
         else:
