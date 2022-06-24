@@ -33,6 +33,8 @@ env
 .env.test.local
 .env.production.local
 dev.env
+venv
+venv/
 
 # vercel
 .vercel
