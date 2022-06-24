@@ -1,3 +1,5 @@
+from os import path
+
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -31,7 +33,7 @@ def draw_boxes(image, detections, category_index, min_confidence):
 
 class PouleNet:
     def __init__(self):
-        self.objects_tracker = ObjectsTracker()
+        self.objects_tracker = ObjectsTracker.load() if path.exists('objects_tracker.pkl') else ObjectsTracker()
         self.model = tf.saved_model.load(MODEL_PATH)
         self.category_index = {
             i + 1: {"id": i + 1, "name": LABEL_MAP[i]} for i in range(len(LABEL_MAP))
@@ -77,6 +79,8 @@ class PouleNet:
             return
         self.telegram_notifier.notify(image, detected_objects)
         self.objects_tracker.update(detected_objects, detected_objects_positions)
+        self.telegram_notifier.update()
+
 
 
 if __name__ == "__main__":

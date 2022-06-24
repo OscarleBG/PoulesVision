@@ -1,9 +1,14 @@
+import asyncio
+
 import cv2
+import telegram
 import telegram as tg
 from decouple import config
 from time import time
 from telegram.ext import Application, CommandHandler, MessageHandler
 from object_tracking import ObjectsTracker
+
+loop = asyncio.get_event_loop()
 
 
 class TelegramNotifier:
@@ -16,6 +21,15 @@ class TelegramNotifier:
         self.chat_id = config("TELEGRAM_CHAT_ID", cast=int)
 
         self.application.add_handler(CommandHandler("where", self.where))
+        # self.application.run_polling()
+        self.initialize_application()
+
+    def initialize_application(self):
+        loop.run_until_complete(self.application.initialize())
+        if self.application.post_init:
+            loop.run_until_complete(self.application.post_init(self))
+        loop.run_until_complete(self.application.updater.start_polling())  # one of updater.start_webhook/polling
+        loop.run_until_complete(self.application.start())
 
     def notify(self, image, detected_objects):
         if time() - self.last_message_time < self.message_cooldown:
@@ -23,7 +37,19 @@ class TelegramNotifier:
         self.last_message_time = time()
         image = cv2.imencode(".jpg", image)[1].tobytes()
         caption = "Detected objects: " + ", ".join(detected_objects)
-        self.application.bot.send_photo(self.chat_id, photo=image, caption=caption)
+        loop.run_until_complete(
+            self.application.bot.send_photo(self.chat_id, photo=image, caption=caption)
+        )
+
+    def update(self):
+        try:
+            loop.run_until_complete(
+                self.application.bot.get_updates()
+            )
+        except telegram.error.TimedOut:
+            pass
 
     async def where(self, update, context):
-        await update.message.reply_text(self.objects_tracker)
+        # print(f'{update.message.from_user.first_name} asked for where')
+        # print(self.objects_tracker)
+        await update.message.reply_text(str(self.objects_tracker))

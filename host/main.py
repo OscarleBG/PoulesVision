@@ -30,7 +30,9 @@ def gen(camera):
     while True:
         if fps_limit > 0:
             time.sleep(sleep_time)
-        frame = camera.get_frame()
+        ret, frame = camera.get_frame()
+        if not ret:
+            continue
         frame = preprocess_frame(frame)
         frame = cv2.imencode(".jpg", frame)[1].tobytes()
         yield b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n\r\n"

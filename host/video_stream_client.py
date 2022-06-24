@@ -1,24 +1,26 @@
 import numpy as np
-import multiprocessing as mp
+import threading as th
 import imagezmq
 from decouple import config
 
 
 class VideoStreamClient:
     def __init__(self):
-        (self.frame, self.frame_pipe) = mp.Pipe(False)
+        self.frame = None
+        self.new_frame = False
 
         self.image_hub = imagezmq.ImageHub(open_port=f'tcp://*:{config("HOST_PORT")}')
 
-        self.get_frame_loop_process = mp.Process(target=self.get_frame_loop)
+        self.get_frame_loop_process = th.Thread(target=self.get_frame_loop)
         self.get_frame_loop_process.start()
 
     def get_frame_loop(self):
         while True:
-            rpi_name, frame = self.image_hub.recv_image()
+            rpi_name, self.frame = self.image_hub.recv_image()
+            self.new_frame = True
             self.image_hub.send_reply(b"K")
-            self.frame_pipe.send(frame)
 
-    def get_frame(self) -> np.ndarray:
-        self.frame.poll(None)
-        return self.frame.recv()
+    def get_frame(self) -> (bool, np.ndarray):
+        new_frame = self.new_frame
+        self.new_frame = False
+        return new_frame, self.frame
