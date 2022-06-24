@@ -24,14 +24,14 @@ class BoxDrawer:
         self.telegram_notifier = TelegramNotifier()
         self.min_confidence = config("MIN_CONFIDENCE", cast=float)
 
-    def draw_boxes(self, image):
+    def draw_boxes(self, image: np.ndarray) -> np.ndarray:
         detections = self._predict(image)
         image_with_boxes = self._draw_boxes(image.copy(), detections)
         detected_objects = [
             LABEL_MAP[i - 1]
             for i in detections["detection_classes"][
                 detections["detection_scores"] > self.min_confidence
-            ]
+                ]
         ]
         self._on_object_detected(image, detected_objects)
         return image_with_boxes
