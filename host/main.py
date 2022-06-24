@@ -8,20 +8,13 @@ from decouple import config
 
 app = Flask(__name__)
 
-pi_camera = VideoStreamClient()
 poulenet = PouleNet()
-FRAME_PREPROCESSORS = [poulenet.process]
+pi_camera = VideoStreamClient(frame_preprocessors=[poulenet.process])
 
 
 @app.route("/")
 def index():
     return render_template("index.html", commands=BUTTON_COMMANDS)
-
-
-def preprocess_frame(frame):
-    for f in FRAME_PREPROCESSORS:
-        frame = f(frame)
-    return frame
 
 
 def gen(camera):
@@ -33,7 +26,6 @@ def gen(camera):
         ret, frame = camera.get_frame()
         if not ret:
             continue
-        frame = preprocess_frame(frame)
         frame = cv2.imencode(".jpg", frame)[1].tobytes()
         yield b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n\r\n"
 

@@ -52,3 +52,5 @@ __pycache__/
 *.png
 
 settings.ini
+
+host/objects_tracker.pkl
