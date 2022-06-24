@@ -21,12 +21,12 @@ class State(Enum):
     UNKNOWN = 4
 
 
-def preview_bounding_box(image=Image.open("../test_image.jpg")):
-    (x_min, y_min), (x_max, y_max) = OUTSIDE_BOUNDING_BOX
-    vis_util.draw_bounding_box_on_image(
-        image, y_min, x_min, y_max, x_max, color="red", thickness=4
-    )
-    image.show()
+# def preview_bounding_box(image=Image.open("../test_image.jpg")):
+#     (x_min, y_min), (x_max, y_max) = OUTSIDE_BOUNDING_BOX
+#     vis_util.draw_bounding_box_on_image(
+#         image, y_min, x_min, y_max, x_max, color="red", thickness=4
+#     )
+#     image.show()
 
 
 def update(detections):
