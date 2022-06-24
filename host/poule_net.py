@@ -41,7 +41,9 @@ class PouleNet:
 
     def process(self, image):
         detections = self._predict(image)
-        image_with_boxes = draw_boxes(image.copy(), detections, self.category_index, self.min_confidence)
+        image_with_boxes = draw_boxes(
+            image.copy(), detections, self.category_index, self.min_confidence
+        )
         self._on_object_detected(image, detections)
         return image_with_boxes
 
@@ -63,13 +65,13 @@ class PouleNet:
             LABEL_MAP[i - 1]
             for i in detections["detection_classes"][
                 detections["detection_scores"] > self.min_confidence
-                ]
+            ]
         ]
         detected_objects_positions = [
             i
             for i in detections["detection_boxes"][
                 detections["detection_scores"] > self.min_confidence
-                ]
+            ]
         ]
         if len(detected_objects) <= 0:
             return

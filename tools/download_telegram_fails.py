@@ -9,4 +9,4 @@ def main():
     bot = tg.Bot(config("TELEGRAM_TOKEN"))
     chat_id = config("TELEGRAM_CHAT_ID", cast=int)
     # retrieve all photos from telegram chat
-    photos = tg.Chat(chat_id
+    # photos = tg.Chat(chat_id
