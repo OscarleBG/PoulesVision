@@ -73,8 +73,8 @@ class ObjectTracker:
         self._last_seen_time = None
 
     def update_state(self, coordinates) -> None:
-        _last_seen_time = time.time()
-        _last_seen_coordinates = coordinates
+        self._last_seen_time = time.time()
+        self._last_seen_coordinates = coordinates
         if (
             OUTSIDE_BOUNDING_BOX[0][0] < coordinates[0] < OUTSIDE_BOUNDING_BOX[1][0]
             and OUTSIDE_BOUNDING_BOX[0][1] < coordinates[1] < OUTSIDE_BOUNDING_BOX[1][1]
@@ -85,7 +85,6 @@ class ObjectTracker:
 
     def get_state(self) -> str:
         if self._last_seen_time is not None and time.time() - self._last_seen_time < 20:
-            # they were seen less than 5 seconds ago
             return "in " + State.CUISINE.name
         else:
             return self._state.name
