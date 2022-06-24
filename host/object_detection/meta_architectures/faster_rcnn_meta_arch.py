@@ -859,7 +859,7 @@ class FasterRCNNMetaArch(model.DetectionModel):
         Raises:
           ValueError: If `predict` is called before `preprocess`.
         """
-        prediction_dict = self._predict_first_stage(preprocessed_inputs)
+        prediction_dict = self
 
         if self._number_of_stages >= 2:
             prediction_dict.update(

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Statistic">
+    <option name="excludedDirectories">
+      <list>
+        <option value="$PROJECT_DIR$/host/object_detection" />
+        <option value="$PROJECT_DIR$/old" />
+        <option value="$PROJECT_DIR$/tools" />
+        <option value="$PROJECT_DIR$/poulenet" />
+        <option value="$PROJECT_DIR$/.idea" />
+        <option value="$PROJECT_DIR$/image_collection" />
+      </list>
+    </option>
+  </component>
+</project>

@@ -1,16 +1,16 @@
 import time
 from flask import Flask, render_template, Response
 from button_actions import *
-from TensorflowBoxDrawer import BoxDrawer
-from VideoStreamClient import VideoStreamClient
+from poule_net import PouleNet
+from video_stream_client import VideoStreamClient
 import cv2
 from decouple import config
 
 app = Flask(__name__)
 
 pi_camera = VideoStreamClient()
-box_drawer = BoxDrawer()
-FRAME_PREPROCESSORS = [box_drawer.draw_boxes]
+box_drawer = PouleNet()
+FRAME_PREPROCESSORS = [box_drawer.process]
 
 # button commands:
 DOOR_OPEN, DOOR_CLOSE, ALARM = "door-open", "door-close", "alarm"

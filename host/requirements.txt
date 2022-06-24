@@ -2,6 +2,6 @@ imutils
 numpy
 opencv-python
 python-decouple
-python-telegram-bot
+python-telegram-bot>=20.0a1
 matplotlib
 tensorflow-gpu

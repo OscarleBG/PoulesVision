@@ -16,7 +16,7 @@ class VideoStreamClient:
 
     def get_frame_loop(self):
         while True:
-            rpi_name, self.frame = self.image_hub.recv_image()
+            _, self.frame = self.image_hub.recv_image()
             self.image_hub.send_reply(b"K")
             self.new_frame = True
 

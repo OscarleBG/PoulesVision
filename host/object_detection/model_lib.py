@@ -763,9 +763,7 @@ def create_model_fn(
                 )
 
             # Eval metrics on a single example.
-            eval_metric_ops = eval_util.get_eval_metric_ops_for_evaluators(
-                eval_config, list(category_index.values()), eval_dict
-            )
+            eval_metric_ops = eval_util
             for loss_key, loss_tensor in iter(losses_dict.items()):
                 eval_metric_ops[loss_key] = tf.metrics.mean(loss_tensor)
             for var in optimizer_summary_vars:
