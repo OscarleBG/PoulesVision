@@ -1,12 +1,8 @@
-import json
 import pickle
 import time
 from enum import Enum
-from os import path
 
-from object_detection.utils import visualization_utils as vis_util
 from decouple import config
-from PIL import Image
 
 OUTSIDE_BOUNDING_BOX = ((0.25, 0), (1, 1))
 IMAGE_SIZE = (config("IMAGE_WIDTH", cast=int), config("IMAGE_HEIGHT", cast=int))

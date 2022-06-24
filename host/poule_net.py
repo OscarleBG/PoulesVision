@@ -18,6 +18,8 @@ LABEL_MAP = [
     "Arnaud",
 ]
 
+TELEGRAM_SHOW_BOXES = config("TELEGRAM_SHOW_BOXES", cast=bool)
+
 
 def draw_boxes(image, detections, category_index, min_confidence):
     return vis_util.visualize_boxes_and_labels_on_image_array(
@@ -50,7 +52,7 @@ class PouleNet:
         image_with_boxes = draw_boxes(
             image.copy(), detections, self.category_index, self.min_confidence
         )
-        self._on_object_detected(image, detections)
+        self._on_object_detected(image, image_with_boxes, detections)
         return image_with_boxes
 
     def _predict(self, image):
@@ -66,18 +68,18 @@ class PouleNet:
         )
         return detections
 
-    def _on_object_detected(self, image, detections):
+    def _on_object_detected(self, image, image_with_boxes, detections):
         detected_objects = [
             LABEL_MAP[i - 1]
             for i in detections["detection_classes"][
                 detections["detection_scores"] > self.min_confidence
-            ]
+                ]
         ]
         detected_objects_positions = [
             i
             for i in detections["detection_boxes"][
                 detections["detection_scores"] > self.min_confidence
-            ]
+                ]
         ]
 
         self.objects_tracker.update(detected_objects, detected_objects_positions)
@@ -85,11 +87,12 @@ class PouleNet:
 
         if len(detected_objects) <= 0:
             return
-        self.telegram_notifier.notify(image, detected_objects)
+
+        self.telegram_notifier.notify(image_with_boxes if TELEGRAM_SHOW_BOXES else image, detected_objects)
 
 
-if __name__ == "__main__":
-    poule_net = PouleNet()
-    image = cv2.imread("../test_image.jpg")
-    image_with_boxes = poule_net.process(image)
-    image_with_boxes.show()
+# if __name__ == "__main__":
+#     poule_net = PouleNet()
+#     image = cv2.imread("../test_image.jpg")
+#     image_with_boxes = poule_net.process(image)
+#     image_with_boxes.show()
