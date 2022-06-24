@@ -35,13 +35,15 @@ def update(detections):
 
 class ObjectsTracker:
     def __init__(self):
-        self.objects: dict[str, ObjectTracker] = {name: ObjectTracker(name) for name in TRACKED_OBJECTS}
+        self.objects: dict[str, ObjectTracker] = {
+            name: ObjectTracker(name) for name in TRACKED_OBJECTS
+        }
         self.save()
 
     def update(self, detected_objects, detected_objects_positions) -> None:
         should_save = False
         for object, (ymin, xmin, ymax, xmax) in zip(
-                detected_objects, detected_objects_positions
+            detected_objects, detected_objects_positions
         ):
             if object not in self.objects:
                 continue
@@ -78,8 +80,8 @@ class ObjectTracker:
         _last_seen_time = time.time()
         _last_seen_coordinates = coordinates
         if (
-                OUTSIDE_BOUNDING_BOX[0][0] < coordinates[0] < OUTSIDE_BOUNDING_BOX[1][0]
-                and OUTSIDE_BOUNDING_BOX[0][1] < coordinates[1] < OUTSIDE_BOUNDING_BOX[1][1]
+            OUTSIDE_BOUNDING_BOX[0][0] < coordinates[0] < OUTSIDE_BOUNDING_BOX[1][0]
+            and OUTSIDE_BOUNDING_BOX[0][1] < coordinates[1] < OUTSIDE_BOUNDING_BOX[1][1]
         ):
             self._state = State.INSIDE
         else:

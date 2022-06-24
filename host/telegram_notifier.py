@@ -28,7 +28,9 @@ class TelegramNotifier:
         loop.run_until_complete(self.application.initialize())
         if self.application.post_init:
             loop.run_until_complete(self.application.post_init(self))
-        loop.run_until_complete(self.application.updater.start_polling())  # one of updater.start_webhook/polling
+        loop.run_until_complete(
+            self.application.updater.start_polling()
+        )  # one of updater.start_webhook/polling
         loop.run_until_complete(self.application.start())
 
     def notify(self, image, detected_objects):
@@ -43,9 +45,7 @@ class TelegramNotifier:
 
     def update(self):
         try:
-            loop.run_until_complete(
-                self.application.bot.get_updates()
-            )
+            loop.run_until_complete(self.application.bot.get_updates())
         except telegram.error.TimedOut:
             pass
 
