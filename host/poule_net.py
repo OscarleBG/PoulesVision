@@ -1,6 +1,4 @@
 from os import path
-
-import cv2
 import numpy as np
 import tensorflow as tf
 from decouple import config
@@ -17,8 +15,6 @@ LABEL_MAP = [
     "Sandrine",
     "Arnaud",
 ]
-
-TELEGRAM_SHOW_BOXES = config("TELEGRAM_SHOW_BOXES", cast=bool)
 
 
 def draw_boxes(image, detections, category_index, min_confidence):
@@ -88,8 +84,7 @@ class PouleNet:
         if len(detected_objects) <= 0:
             return
 
-        self.telegram_notifier.notify(image_with_boxes if TELEGRAM_SHOW_BOXES else image, detected_objects)
-
+        self.telegram_notifier.notify(image_with_boxes, image, detected_objects)
 
 # if __name__ == "__main__":
 #     poule_net = PouleNet()

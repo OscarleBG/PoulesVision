@@ -19,6 +19,8 @@ class TelegramNotifier:
         self.last_message_time = 0
         self.message_cooldown = config("TELEGRAM_MESSAGE_COOLDOWN", cast=float)
         self.chat_id = config("TELEGRAM_CHAT_ID", cast=int)
+        self.save_sent_images = config("TELEGRAM_SAVE_SENT_IMAGES", cast=bool)
+        self.show_boxes = config("TELEGRAM_SHOW_BOXES", cast=bool)
 
         self.application.add_handler(CommandHandler("where", self.where))
         # self.application.run_polling()
@@ -33,15 +35,17 @@ class TelegramNotifier:
         )  # one of updater.start_webhook/polling
         loop.run_until_complete(self.application.start())
 
-    def notify(self, image, detected_objects):
+    def notify(self, image_with_boxes, image, detected_objects):
         if time() - self.last_message_time < self.message_cooldown:
             return
         self.last_message_time = time()
-        image = cv2.imencode(".jpg", image)[1].tobytes()
+        image = cv2.imencode(".jpg", image_with_boxes if self.show_boxes else image)[1].tobytes()
         caption = "Detected objects: " + ", ".join(detected_objects)
         loop.run_until_complete(
             self.application.bot.send_photo(self.chat_id, photo=image, caption=caption)
         )
+        if self.save_sent_images:
+            cv2.imwrite(f"collected_images/{int(time())}.jpg", image)
 
     def update(self):
         try:
