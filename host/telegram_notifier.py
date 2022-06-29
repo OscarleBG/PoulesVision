@@ -39,10 +39,10 @@ class TelegramNotifier:
         if time() - self.last_message_time < self.message_cooldown:
             return
         self.last_message_time = time()
-        image = cv2.imencode(".jpg", image_with_boxes if self.show_boxes else image)[1].tobytes()
+        sent_image = cv2.imencode(".jpg", image_with_boxes if self.show_boxes else image)[1].tobytes()
         caption = "Detected objects: " + ", ".join(detected_objects)
         loop.run_until_complete(
-            self.application.bot.send_photo(self.chat_id, photo=image, caption=caption)
+            self.application.bot.send_photo(self.chat_id, photo=sent_image, caption=caption)
         )
         if self.save_sent_images:
             cv2.imwrite(f"collected_images/{int(time())}.jpg", image)
